@@ -1,4 +1,26 @@
-/* for seeing the canvas */
 #gameContainer {
-    background-color: black;
+    display: grid;
+    grid-template-columns: repeat(20, 30px);
+    grid-template-rows:repeat(20, 30px);
+    justify-content: center;
+    gap: 2px 2px;
+}
+
+#websiteContainer {
+    display: grid;
+    justify-content: center;
+}
+
+/* this is just for the border around the grid */
+#gameBorder {
+    display: inline-block;
+    border: 3px solid rgb(200, 202, 202);
+}
+
+.box {
+    background: #d9d9d9;
+}
+
+.box:hover {
+    background-color: aqua;
 }

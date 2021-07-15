@@ -7,8 +7,24 @@
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
-    <script src="snake.js"></script>
     <body>
-        <canvas id="gameContainer"></canvas>
+        <!-- <canvas id="gameContainer"></canvas> -->
+        <script src="snake.js"></script>
+        <div id="websiteContainer">
+            <div id="gameBorder">
+                <div id="gameContainer">
+                    <script>
+                        // Create the divs for game board.
+                        let dimension = 20;
+                        for(x = 0; x < dimension * dimension; x++) {
+                            let box = document.createElement('div');
+                            box.className = "box";
+
+                            document.getElementById('gameContainer').appendChild(box);
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
