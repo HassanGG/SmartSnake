@@ -1,4 +1,22 @@
-#gameContainer {
+:root {
+    --website-background-colour: #FDF0D5; 
+    --game-border-colour: rgb(200, 202, 202);
+    --platform-background-colour: #E9D2F4;
+    --snake-colour: #86C186;
+    --apple-colour: #DA4644;
+    --default-background-colour: white;
+}
+
+#website-container {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows:repeat(6, 1fr);
+}
+
+#game-container {
+    grid-row-start: 2;
+    grid-row-end: 5;
     display: grid;
     grid-template-columns: repeat(20, 30px);
     grid-template-rows:repeat(20, 30px);
@@ -6,21 +24,44 @@
     gap: 2px 2px;
 }
 
-#websiteContainer {
-    display: grid;
-    justify-content: center;
+/* wrappers define where website items will be placed on screen */
+#game-wrapper {
+    grid-column: 3 /span 5;
+    grid-row: 2 /span 5;
+}
+
+#about-wrapper {
+    grid-column: 9 /span 3;
+    grid-row: 2 /span 3;
 }
 
 /* this is just for the border around the grid */
-#gameBorder {
+#game-border {
     display: inline-block;
-    border: 3px solid rgb(200, 202, 202);
+    border: 3px solid var(--game-border-colour);
 }
 
 .box {
-    background: #d9d9d9;
+    background: var(--default-background-colour);
+}
+
+.text-box {
+    background: var(--default-background-colour);
+    border-radius: 25px;
+    padding: 10px;
 }
 
 .box:hover {
-    background-color: aqua;
+    background-color: var(--snake-colour);
+}
+
+body {
+    background-color: var(--website-background-colour);
+}
+
+/* a platform is the rounded box around divs */
+.platform {
+    background-color: var(--platform-background-colour);
+    padding: 25px;
+    border-radius: 35px;
 }

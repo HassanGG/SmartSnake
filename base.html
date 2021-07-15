@@ -10,20 +10,29 @@
     <body>
         <!-- <canvas id="gameContainer"></canvas> -->
         <script src="snake.js"></script>
-        <div id="websiteContainer">
-            <div id="gameBorder">
-                <div id="gameContainer">
-                    <script>
-                        // Create the divs for game board.
-                        let dimension = 20;
-                        for(x = 0; x < dimension * dimension; x++) {
-                            let box = document.createElement('div');
-                            box.className = "box";
+        <div id="website-container">
+            <div class="title">Title</div>
+            <div class="platform" id="game-wrapper">
+                <div id="game-border">
+                    <div id="game-container">
+                        <script>
+                            // Create the divs for game board.
+                            let dimension = 20;
+                            for(x = 0; x < dimension * dimension; x++) {
+                                let box = document.createElement('div');
+                                box.className = "box";
 
-                            document.getElementById('gameContainer').appendChild(box);
-                        }
-                    </script>
+                                document.getElementById('game-container').appendChild(box);
+                            }
+                        </script>
+                    </div>
                 </div>
+            </div>
+
+            <div class="platform" id="about-wrapper">
+                <p class="text-box">
+                    Snake game played by neural-network!
+                </p>
             </div>
         </div>
     </body>
