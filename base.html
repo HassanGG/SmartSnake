@@ -11,17 +11,28 @@
         <!-- <canvas id="gameContainer"></canvas> -->
         <script src="snake.js"></script>
         <div id="website-container">
-            <div class="title">Title</div>
+            <p class="title">SmartSnake</p>
             <div class="platform" id="game-wrapper">
                 <div id="game-border">
                     <div id="game-container">
                         <script>
                             // Create the divs for game board.
                             let dimension = 20;
-                            for(x = 0; x < dimension * dimension; x++) {
+                            let x = 0;
+                            let y = 0;
+                            for(i = 0; i < dimension * dimension; i++) {
                                 let box = document.createElement('div');
                                 box.className = "box";
+                                // set div ids to be x y coordinates
+                                if(i % dimension === 0 && i > 0) {
+                                    y++;
+                                    x = 0;
+                                } 
 
+                                let divStr = "div" + '-'+ y + '-' + x;
+                                x++;
+
+                                box.id = divStr;
                                 document.getElementById('game-container').appendChild(box);
                             }
                         </script>
@@ -35,5 +46,6 @@
                 </p>
             </div>
         </div>
+        <script src="snake.js"></script>
     </body>
 </html>
