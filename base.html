@@ -20,13 +20,13 @@
                             function initializeBoxes() {
                                 let dimension = 20;
                                 let x = 0;
-                                let y = 0;
+                                let y = 19;
                                 for(i = 0; i < dimension * dimension; i++) {
                                     let box = document.createElement('div');
                                     box.className = "box";
                                     // set div ids to be x y coordinates
                                     if(i % dimension === 0 && i > 0) {
-                                        y++;
+                                        y--;
                                         x = 0;
                                     } 
 

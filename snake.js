@@ -7,11 +7,15 @@ y
 window.onload = () => {
     // dimension should not be changed
     const dimension = 20;
-    const frameInterval = 100;
+    const frameInterval = 1000;
 
     let snake = [{x: 0, y: 0}];
     // direction can be left, right, up or down
+    let eventDirection = "";
+    // this is the direction that has been checked to see if 
+    // valid for snake.
     let direction = "";
+    let prevDirection = "";
 
     function clearScreen() {
         for(let i = 0; i < dimension * dimension; i++) {
@@ -23,7 +27,7 @@ window.onload = () => {
     // this function takes in x, y coordinate and returns 
     // string of div.
     function getDiv(x, y) {
-        return "div" + '-' + y + '-' + x;
+        return "div" + '-' + x + '-' + y;
     }
 
     // this function changes a div's colour based on location.
@@ -38,11 +42,80 @@ window.onload = () => {
         }
     }
 
+    document.addEventListener("keydown", (e) => {
+        switch(e.key) {
+            case "ArrowRight":
+                eventDirection = "right";
+                break;
+            case "ArrowLeft":
+                eventDirection = "left";
+                break;
+            case "ArrowDown":
+                eventDirection = "down";
+                break;
+            case "ArrowUp":
+                eventDirection = "up";
+                break;
+        }
+
+        // console.log(snake[0].x);
+        // console.log(eventDirection);
+        // console.log(direction);
+
+    });
+
+    function getInput() {
+        // validate the direction the user inputted.
+        switch(eventDirection) {
+            case "right":
+                direction = (prevDirection === "left")? direction : "right";
+                break;
+            case "left":
+                direction = (prevDirection === "right")? direction : "left";
+                break;
+            case "down":
+                direction = (prevDirection === "up")? direction : "down";
+                break;
+            case "up":
+                direction = (prevDirection === "down")? direction : "up";
+                break;
+            default:
+                direction = eventDirection;
+        }
+        // update the previous direction to be current.
+        prevDirection = direction;
+    }
+
+    function moveSnake() {
+        let snakeHead = snake[0];
+        snake.pop();
+
+        switch(direction) {
+            case "right":
+                snakeHead.x += 1;
+                break;
+            case "left":
+                snakeHead.x -= 1;
+                break;
+            case "up":
+                snakeHead.y += 1;
+                break;
+            case "down":
+                snakeHead.x -= 1;
+                break;
+        }
+
+        snake.unshift(snakeHead);
+    }
+
     function main() {
         clearScreen();
+        getInput();
         drawSnake();
+        moveSnake();
         setInterval(main, frameInterval);
     }
+    main();
 
 }
 
