@@ -1,10 +1,13 @@
-let snake = [{x: 0, y: 0}];
-
 function clearScreen() {
-    let box = document.getElementsByClassName('box');
-    box.backgroundColor = "black"; 
+    for(let i = 0; i < dimension * dimension; i++) {
+        let box = document.getElementsByClassName('box')[i];
+        box.style.backgroundColor = "white";
+    }
 }
 
-console.log("yo");
+// makes sure the page is loaded before running the javascript
+window.onload = () => {
+    clearScreen();
+    console.log("yo");
+}
 
-clearScreen();

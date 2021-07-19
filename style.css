@@ -65,8 +65,9 @@
     font-family: 'Roboto Mono', monospace;
 }
 
+/* !Important makes sure that javascript doesn't override it */
 .box:hover {
-    background-color: var(--snake-colour);
+    background-color: var(--snake-colour) !important;
 }
 
 body {
