@@ -7,7 +7,7 @@ y
 window.onload = () => {
     // dimension should not be changed
     const dimension = 20;
-    const frameInterval = 100;
+    const frameInterval = 200;
 
     let snake = [{x: 0, y: 0}];
     // direction can be left, right, up or down
@@ -84,25 +84,30 @@ window.onload = () => {
     }
 
     function moveSnake() {
-        let snakeHead = snake[0];
-        snake.pop();
-
         switch(direction) {
             case "right":
-                snakeHead.x += 1;
+                snake.unshift({x: snake[0].x, y: snake[0].y});
+                snake[0].x += 1;
+                snake.pop();
                 break;
             case "left":
-                snakeHead.x -= 1;
+                snake.unshift({x: snake[0].x, y: snake[0].y});
+                snake[0].x -= 1;
+                snake.pop();
                 break;
             case "up":
-                snakeHead.y += 1;
+                snake.unshift({x: snake[0].x, y: snake[0].y});
+                snake[0].y += 1;
+                snake.pop();
                 break;
             case "down":
-                snakeHead.y -= 1;
+                snake.unshift({x: snake[0].x, y: snake[0].y});
+                snake[0].y -= 1;
+                snake.pop();
                 break;
         }
 
-        snake.unshift(snakeHead);
+
     }
 
 
@@ -119,7 +124,10 @@ window.onload = () => {
 
         if(isCollision) {
             resetGame();
+            return true;
         }
+
+        return isCollision;
     }
 
     function resetGame() {
@@ -130,11 +138,11 @@ window.onload = () => {
     }
 
     function main() {
-        clearScreen();
         getInput();
-        drawSnake();
+        clearScreen();
         moveSnake();
         checkCollision();
+        drawSnake();
         setTimeout(main, frameInterval);
     }
     main();
