@@ -139,8 +139,12 @@ window.onload = () => {
     }
 
     function addSnakePart() {
-
+        let snakeTail = {x: 0, y: 0};
+        snakeTail.x = snake[snake.length-1].x
+        snakeTail.y = snake[snake.length-1].y;
+        snake.push(snakeTail);
     }
+
 
     function resetGame() {
         snake = [{x: 0, y: 0}];
