@@ -17,6 +17,8 @@ window.onload = () => {
     let direction = "";
     let prevDirection = "";
 
+    let apple = {x: 0, y: 0};
+
     function clearScreen() {
         for(let i = 0; i < dimension * dimension; i++) {
             let box = document.getElementsByClassName('box')[i];
@@ -114,6 +116,7 @@ window.onload = () => {
     // checks if snake has collided with edge of game.
     function checkCollision() {
         let isCollision = false;
+        let newApple = false;
 
         if(snake[0].x < 0 || snake[0].x >= dimension) {
             isCollision = true;
@@ -127,7 +130,16 @@ window.onload = () => {
             return true;
         }
 
-        return isCollision;
+        if (snake[0].x === apple.x && snake[0].y === apple.y) {
+            newApple = true;
+            addSnakePart();
+        }
+
+        return newApple;
+    }
+
+    function addSnakePart() {
+
     }
 
     function resetGame() {
@@ -135,13 +147,33 @@ window.onload = () => {
         eventDirection = "";
         direction = "";
         prevDirection = "";
+        newApple = true;
     }
 
+    function getRandom(from, to) {
+        return Math.floor(Math.random() * (to - from + 1)) + from;
+    }
+
+    //TODO: make it select out of non-snake divs
+    function setAppleLocation() {
+        apple.x = getRandom(0, 19);
+        apple.y = getRandom(0, 19);
+    }
+
+    function drawApple() {
+        setPixel(apple.x, apple.y, "red");
+    }
+
+    let newApple = true;
     function main() {
-        getInput();
         clearScreen();
+        getInput();
         moveSnake();
-        checkCollision();
+        if (newApple) {
+            setAppleLocation();
+        }
+        newApple = checkCollision();
+        drawApple();
         drawSnake();
         setTimeout(main, frameInterval);
     }
