@@ -125,14 +125,25 @@ window.onload = () => {
             isCollision = true;
         }
 
-        if(isCollision) {
-            resetGame();
-            return true;
+
+        // Check Collision with own body
+        for (let i = 1; i < snake.length; i++) {
+            if (snake[0].x === snake[i].x) {
+                if (snake[0].y === snake[i].y) {
+                    isCollision = true;
+                }
+            }
+
         }
 
         if (snake[0].x === apple.x && snake[0].y === apple.y) {
             newApple = true;
             addSnakePart();
+        }
+
+        if(isCollision) {
+            resetGame();
+            return true;
         }
 
         return newApple;
@@ -168,6 +179,13 @@ window.onload = () => {
         setPixel(apple.x, apple.y, "red");
     }
 
+    function checkWin() {
+        if (snake.length === dimension *dimension) {
+            return true;
+        } 
+        return false;
+    }
+
     let newApple = true;
     function main() {
         clearScreen();
@@ -179,7 +197,9 @@ window.onload = () => {
         newApple = checkCollision();
         drawApple();
         drawSnake();
-        setTimeout(main, frameInterval);
+        if (!checkWin()) {
+            setTimeout(main, frameInterval);
+        }
     }
     main();
 
