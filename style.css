@@ -22,8 +22,6 @@
 }
 
 #game-container {
-    grid-row-start: 2;
-    grid-row-end: 5;
     display: grid;
     grid-template-columns: repeat(20, 30px);
     grid-template-rows:repeat(20, 30px);
@@ -33,8 +31,21 @@
 
 /* wrappers define where website items will be placed on screen */
 #game-wrapper {
+    position: relative;
     grid-column: 3 /span 4;
     grid-row: 2 /span 5;
+    text-align: center;
+    z-index: 1;
+}
+
+.popup {
+    grid-column: 3 /span 4;
+    grid-row: 2 /span 5;
+    /* change z-index to cause popup */
+    z-index: 0;
+}
+
+#popup-text {
     text-align: center;
 }
 
@@ -53,8 +64,6 @@
     background: var(--default-background-colour);
 }
 
-#div1 {
-}
 /* importing roboto mono font from google apis*/
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
 .text-box {

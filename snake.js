@@ -173,6 +173,15 @@ window.onload = () => {
     function setAppleLocation() {
         apple.x = getRandom(0, 19);
         apple.y = getRandom(0, 19);
+
+        for(let i = 0; i < snake.length; i++) {
+            if (apple.x === snake[i].x) {
+                if (apple.y === snake[i].y) {
+                    apple.x = getRandom(0, 19);
+                    apple.y = getRandom(0, 19);
+                }
+            }
+        }
     }
 
     function drawApple() {
