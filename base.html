@@ -8,8 +8,6 @@
     <title>Document</title>
 </head>
     <body>
-        <!-- <canvas id="gameContainer"></canvas> -->
-        <script src="snake.js"></script>
         <div id="website-container">
             <p class="title">SmartSnake</p>
             <div class="platform" id="game-wrapper">
@@ -17,10 +15,10 @@
                     <div id="game-container">
                         <script>
                             // Create the divs for game board.
+                            let dimension = 8;
                             function initializeBoxes() {
-                                let dimension = 20;
                                 let x = 0;
-                                let y = 19;
+                                let y = dimension-1;
                                 for(i = 0; i < dimension * dimension; i++) {
                                     let box = document.createElement('div');
                                     box.className = "box";
@@ -56,5 +54,6 @@
             </div>
         </div>
         <script src="snake.js"></script>
+        <script src="test.js"></script>
     </body>
 </html>

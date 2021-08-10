@@ -11,6 +11,7 @@
     --snake-colour: #86C186;
     --apple-colour: #DA4644;
     --default-background-colour: white;
+    --game-dimension: 8;
 }
 
 #website-container {
@@ -23,8 +24,8 @@
 
 #game-container {
     display: grid;
-    grid-template-columns: repeat(20, 30px);
-    grid-template-rows:repeat(20, 30px);
+    grid-template-columns: repeat(var(--game-dimension), 30px);
+    grid-template-rows:repeat(var(--game-dimension), 30px);
     justify-content: center;
     gap: 2px 2px;
 }
