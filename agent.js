@@ -2,8 +2,11 @@
 // Dimension of the snake game, needs to be changed in stylesheet too
 const dimension = 8;
 const frameInterval = 200;
+// Score is incremented by 10 when the snake gets an apple.
+let score = 0;
 
-function main() {
+
+function runGame() {
     clearScreen();
     // this is where the ai prediction will be gotten.
     getInput(eventDirection);
@@ -15,9 +18,11 @@ function main() {
     drawApple();
     drawSnake();
     if (!checkWin()) {
-        setTimeout(main, frameInterval);
+        setTimeout(runGame, frameInterval);
+    } else {
+        winScreen();
     }
 }
 
 initializeBoxes(dimension);
-main();
+runGame();

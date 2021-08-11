@@ -74,7 +74,7 @@ function getInput(chosenDirection) {
     prevDirection = direction;
 }
 
-function moveSnake(snake) {
+function moveSnake() {
     switch(direction) {
         case "right":
             snake.unshift({x: snake[0].x, y: snake[0].y});
@@ -127,6 +127,7 @@ function checkCollision() {
 
     if (snake[0].x === apple.x && snake[0].y === apple.y) {
         newApple = true;
+        score += 10;
         addSnakePart();
     }
 
@@ -152,6 +153,8 @@ function resetGame() {
     direction = "";
     prevDirection = "";
     newApple = true;
+    
+    failScreen();
 }
 
 function getRandom(from, to) {
@@ -184,3 +187,17 @@ function checkWin() {
     return false;
 }
 
+function winScreen() {
+
+}
+
+function failScreen() {
+    let popup = document.getElementById("game-popup");
+    let text = document.getElementById("popup-text");
+    popup.style.zIndex = "1";
+    text.textContent = "You LOST";
+    let button = document.createElement('button');
+    button.id = "ending-button";
+    button.textContent = "retry?";
+    document.getElementById('game-popup').appendChild(button);
+}
