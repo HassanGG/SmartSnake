@@ -8,20 +8,23 @@ let score = 0;
 
 function runGame() {
     clearScreen();
-    // this is where the ai prediction will be gotten.
-    getInput(eventDirection);
-    moveSnake();
+    newApple = checkAppleCollision();
     if (newApple) {
         setAppleLocation();
     }
-    newApple = checkCollision();
+    getInput(eventDirection);
+    moveSnake();
     drawApple();
-    drawSnake();
-    if (!checkWin()) {
-        setTimeout(runGame, frameInterval);
-    } else {
+    
+    if(checkWallCollision()) {
+        failScreen();
+    } else if (checkWin()) {
         winScreen();
+    } else {
+        drawSnake();
+        setTimeout(runGame, frameInterval);
     }
+
 }
 
 initializeBoxes(dimension);

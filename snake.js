@@ -101,11 +101,9 @@ function moveSnake() {
 
 }
 
-
 // checks if snake has collided with edge of game.
-function checkCollision() {
+function checkWallCollision() {
     let isCollision = false;
-    let newApple = false;
 
     if(snake[0].x < 0 || snake[0].x >= dimension) {
         isCollision = true;
@@ -113,7 +111,6 @@ function checkCollision() {
     if(snake[0].y < 0 || snake[0].y >= dimension) {
         isCollision = true;
     }
-
 
     // Check Collision with own body
     for (let i = 1; i < snake.length; i++) {
@@ -125,15 +122,16 @@ function checkCollision() {
 
     }
 
+    return isCollision;
+}
+
+function checkAppleCollision() {
+    let newApple = false;
+
     if (snake[0].x === apple.x && snake[0].y === apple.y) {
         newApple = true;
         score += 10;
         addSnakePart();
-    }
-
-    if(isCollision) {
-        resetGame();
-        return true;
     }
 
     return newApple;
@@ -153,8 +151,8 @@ function resetGame() {
     direction = "";
     prevDirection = "";
     newApple = true;
-    
-    failScreen();
+    score = 0;
+    runGame();
 }
 
 function getRandom(from, to) {
@@ -188,16 +186,29 @@ function checkWin() {
 }
 
 function winScreen() {
+    let popup = document.getElementById("game-popup");
+    let text = document.getElementById("popup-text");
+    let button = document.getElementById("ending-button");
+    popup.style.zIndex = "1";
+    text.textContent = "You Won! Score = " + score;
+    button.style.zIndex = "1";
 
 }
 
 function failScreen() {
     let popup = document.getElementById("game-popup");
     let text = document.getElementById("popup-text");
+    let button = document.getElementById("ending-button");
     popup.style.zIndex = "1";
-    text.textContent = "You LOST";
-    let button = document.createElement('button');
-    button.id = "ending-button";
-    button.textContent = "retry?";
-    document.getElementById('game-popup').appendChild(button);
+    text.textContent = "You LOST Score = " + score;
+    button.style.zIndex = "1";
+}
+
+function retry() {
+    let button = document.getElementById("ending-button");
+    let popup = document.getElementById("game-popup");
+    button.style.zIndex = "0";
+    popup.style.zIndex = "0";
+    
+    resetGame();
 }
