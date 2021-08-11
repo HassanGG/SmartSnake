@@ -15,8 +15,7 @@
                     <div id="game-container">
                         <script>
                             // Create the divs for game board.
-                            let dimension = 8;
-                            function initializeBoxes() {
+                            function initializeBoxes(dimension) {
                                 let x = 0;
                                 let y = dimension-1;
                                 for(i = 0; i < dimension * dimension; i++) {
@@ -35,7 +34,6 @@
                                     document.getElementById('game-container').appendChild(box);
                                 }
                             }
-                            initializeBoxes();
                         </script>
                     </div>
                 </div>
@@ -54,6 +52,6 @@
             </div>
         </div>
         <script src="snake.js"></script>
-        <script src="test.js"></script>
+        <script src="agent.js"></script>
     </body>
 </html>

@@ -1,15 +1,10 @@
-// dimension should not be changed
-// const dimension = 8;
-const frameInterval = 200;
+// This file contains all the functions and variables of the game
 
 let snake = [{x: 0, y: 0}];
-// direction can be left, right, up or down
 let eventDirection = "";
-// this is the direction that has been checked to see if 
-// valid for snake.
 let direction = "";
 let prevDirection = "";
-
+let newApple = true;
 let apple = {x: 0, y: 0};
 
 function clearScreen() {
@@ -31,6 +26,7 @@ function setPixel(x, y, colour) {
     div.style.backgroundColor = colour;
 }
 
+// takes in snake object and draws on screen
 function drawSnake() {
     for(let i = 0; i < snake.length; i++) {
         setPixel(snake[i].x, snake[i].y, "green");
@@ -56,9 +52,9 @@ document.addEventListener("keydown", (e) => {
 
 });
 
-function getInput() {
+function getInput(chosenDirection) {
     // validate the direction the user inputted.
-    switch(eventDirection) {
+    switch(chosenDirection) {
         case "right":
             direction = (prevDirection === "left")? direction : "right";
             break;
@@ -72,13 +68,13 @@ function getInput() {
             direction = (prevDirection === "down")? direction : "up";
             break;
         default:
-            direction = eventDirection;
+            direction = chosenDirection;
     }
     // update the previous direction to be current.
     prevDirection = direction;
 }
 
-function moveSnake() {
+function moveSnake(snake) {
     switch(direction) {
         case "right":
             snake.unshift({x: snake[0].x, y: snake[0].y});
@@ -187,22 +183,4 @@ function checkWin() {
     } 
     return false;
 }
-
-let newApple = true;
-function main() {
-    clearScreen();
-    getInput();
-    moveSnake();
-    if (newApple) {
-        setAppleLocation();
-    }
-    newApple = checkCollision();
-    drawApple();
-    drawSnake();
-    if (!checkWin()) {
-        setTimeout(main, frameInterval);
-    }
-}
-main();
-
 
