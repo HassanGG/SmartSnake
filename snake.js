@@ -1,13 +1,14 @@
 // This file contains all the functions and variables of the game
 
-let snake = [{x: 0, y: 0}];
+let snake = [{x: 1, y: 1}];
 let eventDirection = "";
-let direction = "";
+let direction= "";
 let prevDirection = "";
 let newApple = true;
 let apple = {x: 0, y: 0};
 
 function clearScreen() {
+
     for(let i = 0; i < dimension * dimension; i++) {
         let box = document.getElementsByClassName('box')[i];
         box.style.backgroundColor = "white";
@@ -67,10 +68,47 @@ function getInput(chosenDirection) {
         case "up":
             direction = (prevDirection === "down")? direction : "up";
             break;
-        default:
+            default:
             direction = chosenDirection;
     }
     // update the previous direction to be current.
+    prevDirection = direction;
+    
+}
+
+
+// Chosen direction is either left, right or up.
+let possibleDirections = ["left", "up", "right", "down"];
+let numDirections = 4;
+function getAiInput(chosenDirection) {
+    let prevIndex = possibleDirections.indexOf(prevDirection);
+    if(prevIndex != -1) {
+        switch(chosenDirection) {
+            case "left":
+                direction = possibleDirections[(prevIndex - 1) % numDirections];
+
+                if((prevIndex - 1) % numDirections < 0) {
+                    direction = possibleDirections[numDirections- 1];
+                }
+
+                eventDirection = "up";
+                break;
+            case "up":
+                // do nothing
+                break;
+            case "right":
+                direction = possibleDirections[(prevIndex + 1) % numDirections];
+                eventDirection = "up";
+                break;
+            
+            default:
+                console.log("ERROR: NON POSSIBLE DIRECTION CHOSEN IN getAiInput()");
+                            
+        }
+    } else {
+        direction = "up";
+    }
+    
     prevDirection = direction;
 }
 
@@ -102,20 +140,20 @@ function moveSnake() {
 }
 
 // checks if snake has collided with edge of game.
-function checkWallCollision() {
+function checkWallCollision(point) {
     let isCollision = false;
 
-    if(snake[0].x < 0 || snake[0].x >= dimension) {
+    if(point.x < 0 || point.x >= dimension) {
         isCollision = true;
     }
-    if(snake[0].y < 0 || snake[0].y >= dimension) {
+    if(point.y < 0 || point.y >= dimension) {
         isCollision = true;
     }
 
     // Check Collision with own body
     for (let i = 1; i < snake.length; i++) {
-        if (snake[0].x === snake[i].x) {
-            if (snake[0].y === snake[i].y) {
+        if (point.x === snake[i].x) {
+            if (point.y === snake[i].y) {
                 isCollision = true;
             }
         }
@@ -130,7 +168,7 @@ function checkAppleCollision() {
 
     if (snake[0].x === apple.x && snake[0].y === apple.y) {
         newApple = true;
-        score += 10;
+        reward = 10;
         addSnakePart();
     }
 
@@ -146,12 +184,12 @@ function addSnakePart() {
 
 
 function resetGame() {
-    snake = [{x: 0, y: 0}];
+    snake = [{x: 1, y: 1}];
     eventDirection = "";
     direction = "";
     prevDirection = "";
     newApple = true;
-    score = 0;
+    reward = -10;
     runGame();
 }
 
