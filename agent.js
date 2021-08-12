@@ -8,10 +8,10 @@ let score = 0;
 
 function runGame() {
     clearScreen();
-    newApple = checkAppleCollision();
     if (newApple) {
         setAppleLocation();
     }
+    newApple = checkAppleCollision();
     getInput(eventDirection);
     moveSnake();
     drawApple();
