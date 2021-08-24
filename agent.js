@@ -5,22 +5,34 @@ const frameInterval = 200;
 // Score is incremented by 10 when the snake gets an apple.
 let score = 0;
 let numFrames = 0;
+const frameLimit = 100;
 let reward = 0;
 
+function getState() {
+    
+}
 
+
+function train() {
+    
+}
+
+// runs the whole network and game 
 function runGame() {
     clearScreen();
     if (newApple) {
         setAppleLocation();
     }
     newApple = checkAppleCollision();
-    // getInput(eventDirection);
-    getAiInput(eventDirection);
+    // train the snake game
+    // train();
+    getInput(eventDirection);
+    // getAiInput(eventDirection);
     moveSnake();
     drawApple();
     
     // 100 * snake length is how long the snake has to beat the game.
-    if(checkWallCollision(snake[0]) || numFrames > 100 * snake.length) {
+    if(checkWallCollision(snake[0]) || numFrames > frameLimit * snake.length) {
         numFrames = 0;
         failScreen();
     } else if (checkWin()) {
@@ -34,6 +46,7 @@ function runGame() {
     }
 
 }
+
 
 initializeBoxes(dimension);
 runGame();
