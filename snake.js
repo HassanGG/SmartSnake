@@ -1,11 +1,12 @@
 // This file contains all the functions and variables of the game
 
-let snake = [{x: 1, y: 1}];
+const dimension = 8;
+let snake = [{x: Math.floor((dimension-1)/2), y: Math.floor((dimension-1)/2)}];
 let eventDirection = "";
 let direction= "";
 let prevDirection = "";
 let newApple = true;
-let apple = {x: 0, y: 0};
+let apple = {x: getRandom(0, 7), y: getRandom(0, 7)};
 
 function clearScreen() {
 
@@ -23,8 +24,10 @@ function getDiv(x, y) {
 
 // this function changes a div's colour based on location.
 function setPixel(x, y, colour) {
-    let div = document.getElementById(getDiv(x, y));
-    div.style.backgroundColor = colour;
+    if(x < dimension && x >= 0 && y < dimension && y >= 0) {
+        let div = document.getElementById(getDiv(x, y));
+        div.style.backgroundColor = colour;
+    }
 }
 
 // takes in snake object and draws on screen
@@ -49,8 +52,6 @@ document.addEventListener("keydown", (e) => {
             eventDirection = "up";
             break;
     }
-
-
 });
 
 function getInput(chosenDirection) {
@@ -75,8 +76,6 @@ function getInput(chosenDirection) {
     prevDirection = direction;
     
 }
-
-
 // Chosen direction is either left, right or up.
 let possibleDirections = ["left", "up", "right", "down"];
 let numDirections = 4;
@@ -86,11 +85,9 @@ function getAiInput(chosenDirection) {
         switch(chosenDirection) {
             case "left":
                 direction = possibleDirections[(prevIndex - 1) % numDirections];
-
                 if((prevIndex - 1) % numDirections < 0) {
                     direction = possibleDirections[numDirections- 1];
                 }
-
                 eventDirection = "up";
                 break;
             case "up":
@@ -110,8 +107,8 @@ function getAiInput(chosenDirection) {
     }
     
     prevDirection = direction;
+    return direction;
 }
-
 function moveSnake() {
     switch(direction) {
         case "right":
@@ -135,21 +132,16 @@ function moveSnake() {
             snake.pop();
             break;
     }
-
-
 }
-
 // checks if snake has collided with edge of game.
-function checkWallCollision(point) {
+function checkCollision(point) {
     let isCollision = false;
-
     if(point.x < 0 || point.x >= dimension) {
         isCollision = true;
     }
     if(point.y < 0 || point.y >= dimension) {
         isCollision = true;
     }
-
     // Check Collision with own body
     for (let i = 1; i < snake.length; i++) {
         if (point.x === snake[i].x) {
@@ -157,62 +149,57 @@ function checkWallCollision(point) {
                 isCollision = true;
             }
         }
-
     }
-
     return isCollision;
 }
 
 function checkAppleCollision() {
     let newApple = false;
-
     if (snake[0].x === apple.x && snake[0].y === apple.y) {
         newApple = true;
         reward = 10;
         addSnakePart();
     }
-
     return newApple;
 }
-
 function addSnakePart() {
     let snakeTail = {x: 0, y: 0};
     snakeTail.x = snake[snake.length-1].x
     snakeTail.y = snake[snake.length-1].y;
     snake.push(snakeTail);
 }
-
-
 function resetGame() {
-    snake = [{x: 1, y: 1}];
+    snake = [{x: Math.floor((dimension-1)/2), y: Math.floor((dimension-1)/2)}];
     eventDirection = "";
     direction = "";
     prevDirection = "";
     newApple = true;
-    reward = -10;
+    apple = {x: getRandom(0, 7), y: getRandom(0, 7)};
+    score = 0;
+    fitModel(stateHistory);
+    stateHistory = [];
     runGame();
 }
-
 function getRandom(from, to) {
     return Math.floor(Math.random() * (to - from + 1)) + from;
 }
-
 //TODO: make it select out of non-snake divs
 function setAppleLocation() {
-    apple.x = getRandom(0, dimension-1);
-    apple.y = getRandom(0, dimension-1);
-
-    for(let i = 0; i < snake.length; i++) {
-        if (apple.x === snake[i].x) {
-            if (apple.y === snake[i].y) {
-                apple.x = getRandom(0, dimension-1);
-                apple.y = getRandom(0, dimension-1);
+    if (newApple) {
+        apple.x = getRandom(0, dimension-1);
+        apple.y = getRandom(0, dimension-1);
+        for(let i = 0; i < snake.length; i++) {
+            if (apple.x === snake[i].x) {
+                if (apple.y === snake[i].y) {
+                    apple.x = getRandom(0, dimension-1);
+                    apple.y = getRandom(0, dimension-1);
+                }
             }
         }
     }
 }
-
 function drawApple() {
+    
     setPixel(apple.x, apple.y, "red");
 }
 
@@ -228,25 +215,28 @@ function winScreen() {
     let text = document.getElementById("popup-text");
     let button = document.getElementById("ending-button");
     popup.style.zIndex = "1";
-    text.textContent = "You Won! Score = " + score;
+    text.textContent = "Won! Score = " + score;
     button.style.zIndex = "1";
 
+    setTimeout(() => {
+        retry();
+    }, 1000);
 }
 
 function failScreen() {
     let popup = document.getElementById("game-popup");
     let text = document.getElementById("popup-text");
-    let button = document.getElementById("ending-button");
     popup.style.zIndex = "1";
-    text.textContent = "You LOST Score = " + score;
-    button.style.zIndex = "1";
+    text.textContent = "LOST Score = " + score;
+    // save(model);
+    setTimeout(function () {
+        retry();
+    }, 1000);
 }
 
 function retry() {
-    let button = document.getElementById("ending-button");
     let popup = document.getElementById("game-popup");
-    button.style.zIndex = "0";
     popup.style.zIndex = "0";
-    
+    // save(model);
     resetGame();
 }
