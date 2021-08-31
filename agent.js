@@ -174,7 +174,7 @@ class Agent {
 }
 
 // (dimension, frameInterval, rewardAmount)
-let snake = new Snake(8, 10, 20);
+let snake = new Snake(8, 50, 20);
 
 // (game, epsilonNum)
 let agent = new Agent(snake, 300);
