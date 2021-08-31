@@ -4,12 +4,12 @@ class LinearQNet {
     constructor(inputNum, hiddenNum, outputNum, learningRate) {
         this.learningRate = learningRate;
         this.model = tf.sequential();
-        this.model.add(tf.layers.dense({units: hiddenNum , activation: 'relu', inputShape: inputNum}));
-        this.model.add(tf.layers.dense({units: outputNum, activation: 'relu', inputShape: hiddenNum}));
+        this.model.add(tf.layers.dense({units: hiddenNum , activation: 'relu', inputShape: [inputNum]}));
+        this.model.add(tf.layers.dense({units: outputNum, activation: 'relu', inputShape: [hiddenNum]}));
         
         this.model.compile({
-            optimizer: tf.train.adam(learningRate),
-            loss: 'meanSquaredError'
+            loss: 'meanSquaredError',
+            optimizer: tf.train.adam(learningRate)
         });
     }
     
@@ -19,6 +19,7 @@ class LinearQNet {
         return tf.tidy(() =>{
             let inputTensor = tf.tensor(state, [1, 11]);
             let output = this.model.predict(inputTensor);
+
             // argMax returns index of largest value.
             return output.dataSync();
             // return Array.from(output.dataSync());
@@ -59,24 +60,24 @@ class QTrainer {
         let qNew = 0;
         
         for (let i = 0; i < gameOvers.length; i++) {
-            qNew = [i];
+            qNew = rewards[i];
             if (!gameOvers[i]) {
-                let predNext = this.qnet.forward(nextStates[i])
-                qNew = rewards[i] + this.gamma * Math.max(predNext);
+                let predNext = this.qnet.forward(nextStates[i]);
+                qNew = rewards[i] + this.gamma * Math.max(...predNext);
             }
+            console.log(qNew);
             target[i][maxIndex(actions[i])] = qNew;
             // let predTensor = tf.tensor1d(pred[i]);
-            this.fitModel(oldStates[i], target[i]);
+            // this.fitModel(oldStates[i], target[i]);
         }
     
     }
 
-    async fitModel(oldState, target) {
+    async fitModel(input, target) {
         // let oldStateTensor = tf.tensor2d([oldState])
-        let oldStateTensor = tf.tensor(oldState, [1, 11]);
+        let oldStateTensor = tf.tensor(input, [1, 11]);
         let targetTensor = tf.tensor(target, [1,3]);
         
-        console.log(target);
         await this.model.fit(oldStateTensor, targetTensor,{
             batchSize: 3,
             epochs: 1

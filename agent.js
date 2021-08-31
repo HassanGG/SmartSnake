@@ -6,13 +6,13 @@ class Agent {
     constructor(game) {
         this.qnet = new LinearQNet(11,256,3,0.001);
         this.trainer = new QTrainer(this.qnet, this.qnet.learningRate, 0.9);
-        this.model = this.qnet;
+        this.model = this.qnet.model;
         this.game = game;
         this.numGames = 0;
         this.epsilon = 0;
         this.gamma = 0;
         this.memory = [];
-        this.MAX_MEMORY = 100;
+        this.MAX_MEMORY = 100000;
         // TODO: Add model and trainer
     }
     
@@ -104,7 +104,7 @@ class Agent {
             move = getRandom(0, 2);
             finalMove[move] = 1;
         } else {
-            let prediction = this.model.forward(state);
+            let prediction = this.qnet.forward(state);
             move = maxIndex(prediction);
             finalMove[move] = 1;
         }
@@ -117,24 +117,56 @@ class Agent {
         // TODO: 
         this.trainer.trainStep(oldState, action, reward, newState, gameOver);
     }
+    
+    trainLong() {
+        let oldStates = [];
+        let actions = [];
+        let rewards = [];
+        let nextStates = [];
+        let gameOvers = [];
+        for(let i = 0; i < this.memory.length; i++) {
+            oldStates.push(this.memory[i][0]);
+            actions.push(this.memory[i][1]);
+            rewards.push(this.memory[i][2]);
+            nextStates.push(this.memory[i][3]);
+            gameOvers.push(this.memory[i][4]);
+        }
 
-    remember(oldState, move, reward, newState, gameOver) {
-        if(this.memory.length === this.MAX_MEMORY) {
+        console.log(nextStates)
+        
+        this.trainer.trainStep(oldStates, actions, rewards, nextStates, gameOvers);
+    }
+
+    remember(oldState, action, reward, newState, gameOver) {
+        if(this.memory.length > this.MAX_MEMORY) {
             this.memory.shift();
         }
         
-        let memoryObj = {
-            oldState: oldState,
-            move: move,
-            reward: reward, 
-            newState: newState,
-            gameOver: gameOver
-        }
+        this.memory.push([oldState, action, reward, newState, gameOver]);
         
-        this.memory.push(memoryObj);
+    //     let memoryObj = {
+    //         oldState: oldState,
+    //         action: action,
+    //         reward: reward, 
+    //         newState: newState,
+    //         gameOver: gameOver
+    //     }
+        
+    //     this.memory.push(memoryObj);
     }
     
-    
+    getMove(move) {
+        switch(maxIndex(move)) {
+            case 0:
+                return "left";
+            case 1:
+                return "up";
+            case 2:
+                return "right";
+            default:
+                return "up";
+        }
+    }
 }
 
 let snake = new Snake(8, 200);
@@ -143,6 +175,7 @@ let agent = new Agent(snake);
 initializeGrid(snake.dimension);
 
 let record = 0;
+
 function train() {
     // console.log(qnet.forward(agent.getState()));
     let oldState = agent.getState();
@@ -154,8 +187,11 @@ function train() {
     let score = snake.score;
 
     // TODO: takes in move
-    snake.playStep(snake.eventDirection);
+    // snake.playStep(snake.eventDirection);
+    snake.playStep(agent.getMove(move));
+    snake.reward = 0;
     let newState = agent.getState();
+    
 
     agent.trainShort([oldState], [move], [reward], [newState], [gameOver]);
     agent.remember(oldState, move, reward, newState, gameOver);
@@ -163,6 +199,7 @@ function train() {
     if(gameOver) {
         snake.resetGame();
         agent.numGames++;
+        agent.trainLong();
         if (score > record){
             record = score; 
             //TODO:
