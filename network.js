@@ -65,7 +65,6 @@ class QTrainer {
                 let predNext = this.qnet.forward(nextStates[i]);
                 qNew = rewards[i] + this.gamma * Math.max(...predNext);
             }
-            console.log(qNew);
             target[i][maxIndex(actions[i])] = qNew;
             // let predTensor = tf.tensor1d(pred[i]);
             // this.fitModel(oldStates[i], target[i]);

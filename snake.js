@@ -231,6 +231,7 @@ class Snake {
         }
 
         if(this.checkCollision(this.snake[0])) {
+            this.reward -= 10;
             return true;
         }
         
@@ -241,17 +242,13 @@ class Snake {
         this.clearScreen();
         this.newApple = this.checkAppleCollision();
         this.setAppleLocation();
-        // train the snake game
-        // train();
         // this.setInput(this.eventDirection);
-        // this.setInput(move);
         // getAiInput(forward(getState()));
         this.setAiInput(move);
         this.moveSnake();
         // 100 * snake length is how long the snake has to beat the game.
-        this.score += this.reward;
         
-        if(this.checkGameOver()) {
+        if(this.checkGameOver() || this.numFrames > 100 * this.snake.length) {
             this.numFrames = 0;
             return true;
         } else {
