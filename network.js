@@ -5,6 +5,7 @@ class LinearQNet {
         this.learningRate = learningRate;
         this.model = tf.sequential();
         this.model.add(tf.layers.dense({units: hiddenNum , activation: 'relu', inputShape: [inputNum]}));
+        this.model.add(tf.layers.dense({units: hiddenNum , activation: 'relu', inputShape: [hiddenNum]}));
         this.model.add(tf.layers.dense({units: outputNum, activation: 'relu', inputShape: [hiddenNum]}));
         
         this.model.compile({

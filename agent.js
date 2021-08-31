@@ -13,8 +13,9 @@ class Agent {
         this.epsilonNum = epsilonNum;
         this.epsilon = 0;
         this.memory = [];
+        this.memorySize = 0;
         this.MAX_MEMORY = 100000;
-        this.BATCH_SIZE = 100;
+        this.BATCH_SIZE = 1000;
         // TODO: Add model and trainer
     }
     
@@ -149,12 +150,13 @@ class Agent {
     }
 
     remember(oldState, action, reward, newState, gameOver) {
-        if(this.memory.length > this.MAX_MEMORY) {
+        if(this.memorySize > this.MAX_MEMORY) {
             this.memory.shift();
+            this.memorySize--;
         }
         
         this.memory.push([oldState, action, reward, newState, gameOver]);
-        
+        this.memorySize++;
     }
     
     getMove(move) {
@@ -171,10 +173,11 @@ class Agent {
     }
 }
 
-// (dimension, framInterval, rewardAmount)
-let snake = new Snake(8, 10, 10);
+// (dimension, frameInterval, rewardAmount)
+let snake = new Snake(8, 10, 20);
+
 // (game, epsilonNum)
-let agent = new Agent(snake, 160);
+let agent = new Agent(snake, 300);
             
 initializeGrid(snake.dimension);
 
@@ -207,8 +210,7 @@ function train() {
         agent.trainLong();
         if (score > record){
             record = score; 
-            //TODO:
-            // qnet.save("net");
+            // agent.qnet.save("net");
         }  
 
         if (score > record) {

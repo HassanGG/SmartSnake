@@ -9,9 +9,9 @@ class Snake {
         this.direction= "";
         this.prevDirection = "";
         this.newApple = true;
-        this.apple = {x: this.getRandom(0, 7), y: this.getRandom(0, 7)};
+        this.apple = {x: this.getRandom(0, this.dimension-1), y: this.getRandom(0, this.dimension-1)};
         this.reward = 0;
-        this.score = 0
+        this.score = 0;
         this.numFrames = 0;
         this.rewardAmount = rewardAmount;
         
@@ -208,7 +208,7 @@ class Snake {
         this.direction = "";
         this.prevDirection = "";
         this.newApple = true;
-        this.apple = {x: this.getRandom(0, 7), y: this.getRandom(0, 7)};
+        this.apple = {x: this.getRandom(0, this.dimension-1), y: this.getRandom(0, this.dimension-1)};
         this.score = 0;
         // fitModel(stateHistory);
         // this.stateHistory = [];
@@ -263,7 +263,7 @@ class Snake {
     playStep(move) {
         this.clearScreen();
         this.newApple = this.checkAppleCollision();
-        this.checkCloseToApple();
+        // this.checkCloseToApple();
         this.setAppleLocation();
         // this.setInput(this.eventDirection);
         // getAiInput(forward(getState()));
