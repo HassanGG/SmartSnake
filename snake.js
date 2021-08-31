@@ -1,7 +1,7 @@
 // This file contains all the functions and variables of the game
 
 class Snake {
-    constructor(dimension, frameInterval) {
+    constructor(dimension, frameInterval, rewardAmount) {
         this.dimension = dimension;
         this.frameInterval = frameInterval;
         this.snake = [{x: Math.floor((dimension-1)/2), y: Math.floor((dimension-1)/2)}];
@@ -13,6 +13,7 @@ class Snake {
         this.reward = 0;
         this.score = 0
         this.numFrames = 0;
+        this.rewardAmount = rewardAmount;
         
         document.addEventListener("keydown", (e) => {
             switch(e.key) {
@@ -162,12 +163,33 @@ class Snake {
         }
         return isCollision;
     }
+    
+    checkCloseToApple() {
+        let closeLocations = [
+            {x: this.apple.x-1, y: this.apple.y},
+            {x: this.apple.x, y: this.apple.y - 1},
+            {x: this.apple.x-1, y: this.apple.y-1},
+            {x: this.apple.x+1, y: this.apple.y},
+            {x: this.apple.x, y: this.apple.y+1},
+            {x: this.apple.x+1, y: this.apple.y+1},
+            {x: this.apple.x+1, y: this.apple.y-1},
+            {x: this.apple.x-1, y: this.apple.y+1},
+        ]
+        
+        for (let i = 0; i < closeLocations.length; i++) {
+            if (this.snake[0].x === closeLocations[i].x && this.snake[0].y === closeLocations[i].y) {
+                this.reward += this.rewardAmount / 4;
+            }
+            
+            this.setPixel(closeLocations[i].x, closeLocations[i].y, "rgb(217, 242, 250)");
+        }
+    }
 
     checkAppleCollision() {
         let newApple = false;
         if (this.snake[0].x === this.apple.x && this.snake[0].y === this.apple.y) {
             newApple = true;
-            this.reward = 10;
+            this.reward = this.rewardAmount;
             this.addSnakePart();
         }
         return newApple;
@@ -231,7 +253,7 @@ class Snake {
         }
 
         if(this.checkCollision(this.snake[0])) {
-            this.reward -= 10;
+            this.reward -= this.rewardAmount;
             return true;
         }
         
@@ -241,6 +263,7 @@ class Snake {
     playStep(move) {
         this.clearScreen();
         this.newApple = this.checkAppleCollision();
+        this.checkCloseToApple();
         this.setAppleLocation();
         // this.setInput(this.eventDirection);
         // getAiInput(forward(getState()));

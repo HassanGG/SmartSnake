@@ -3,14 +3,15 @@ function getRandom(from, to) {
 }
 
 class Agent {
-    constructor(game) {
+    constructor(game, epsilonNum) {
+        this.gamma = 0.9;
         this.qnet = new LinearQNet(11,256,3,0.001);
-        this.trainer = new QTrainer(this.qnet, this.qnet.learningRate, 0.9);
+        this.trainer = new QTrainer(this.qnet, this.qnet.learningRate, this.gamma);
         this.model = this.qnet.model;
         this.game = game;
         this.numGames = 0;
+        this.epsilonNum = epsilonNum;
         this.epsilon = 0;
-        this.gamma = 0;
         this.memory = [];
         this.MAX_MEMORY = 100000;
         this.BATCH_SIZE = 100;
@@ -95,7 +96,7 @@ class Agent {
     }
 
     getAction(state) {
-        this.epsilon = 80 - this.numGames;
+        this.epsilon = this.epsilonNum - this.numGames;
         let finalMove = [0, 0, 0];
         
         let move;
@@ -170,8 +171,10 @@ class Agent {
     }
 }
 
-let snake = new Snake(8, 10);
-let agent = new Agent(snake);
+// (dimension, framInterval, rewardAmount)
+let snake = new Snake(8, 10, 10);
+// (game, epsilonNum)
+let agent = new Agent(snake, 160);
             
 initializeGrid(snake.dimension);
 
